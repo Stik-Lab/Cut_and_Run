@@ -1,0 +1,2 @@
+# List sample names as they appear in the FASTQ files (e.g., sample1.fastq.gz → "sample1")
+# IMPORTANT: The last entry in the list must be the Input/Control sample
