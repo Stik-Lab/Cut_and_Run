@@ -16,4 +16,4 @@ genome='hg38'
 input=$(tail -n 1 samples.txt)
 effectiveGenomeSize=2913022398
 
-N=$(( $(wc -l < samples.txt) - 1 ))
+
