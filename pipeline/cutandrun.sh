@@ -38,7 +38,7 @@ echo "................................................................ 1. END_FA
 # ========== TRIMMING ==========
 echo   "................................................................     2. START_TRIMMING ${describer}   ................................................................"
 
-if [${paired}=="no" ]; then
+if ["${paired}"=="no" ]; then
 
 trim_galore --fastqc --output_dir ${path_fq}  ${path_fq}/${describer}.fastq.gz
 
@@ -55,7 +55,7 @@ echo    "................................................................    2. 
 # ========== ALIGNMENT ==========
 echo "................................................................ 3. START_ALIGNMENT ${describer} ................................................................"
 
-if [${paired}=="no" ]; then
+if ["${paired}"=="no" ]; then
 
 bowtie2 -x ${indexgenome} \
        -U ${path_fq}/${describer}*.fq.gz \
@@ -116,9 +116,8 @@ echo "................................................................ 8. END_bl
 
 # ========== COVERAGE ==========
 
-echo "................................................................ 9. START_blacklist regions + index ${describer} ................................................................"
+echo "................................................................ 9. START_bigwig ${describer} ................................................................"
 
-samtools ${path_bam}/${name}_clean.bam
-bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${describer}.bw --effectiveGenomeSize ${effectiveGenomeSize} --outFileFormat ${path_bw} --binSize 1 --normalizeUsing RPGC > ${path_bw}/${describer}.log
+bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${describer}.bw --effectiveGenomeSize ${effectiveGenomeSize} --outFileFormat ${path_bw} --binSize 10 --normalizeUsing RPGC > ${path_bw}/${describer}.log
 
-echo "................................................................ 9. END_blacklist + index ${describer} ................................................................"
+echo "................................................................ 9. END_bigwig ${describer} ................................................................"
