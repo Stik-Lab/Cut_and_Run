@@ -2,6 +2,8 @@
 path_fq='path_to_fastq'
 path_bam='path_to_bamfiles'
 path_temp='path_to_temporaryfiles'
+path_bw='path_to_bw'
+path_macs2='path_to_macs2'
 
 # Files and programs 
 indexgenome='/mnt/beegfs/public/references/index/bowtie2/GRCh38_noalt_as/GRCh38_noalt_as'   # requirements
