@@ -118,6 +118,6 @@ echo "................................................................ 8. END_bl
 
 echo "................................................................ 9. START_bigwig ${describer} ................................................................"
 
-bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${describer}.bw --effectiveGenomeSize ${effectiveGenomeSize} --outFileFormat ${path_bw} --binSize 10 --normalizeUsing RPGC > ${path_bw}/${describer}.log
+bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${describer}.bw --effectiveGenomeSize ${effectiveGenomeSize} --outFileFormat bigwig --binSize 10 --normalizeUsing RPGC > ${path_bw}/${describer}.log
 
 echo "................................................................ 9. END_bigwig ${describer} ................................................................"
