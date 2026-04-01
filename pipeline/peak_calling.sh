@@ -23,9 +23,9 @@ done
 for num in 1 05
 do
 
-if ["${narrow}"=="yes" ];then
+if [ "${narrow}"=="yes" ];then
 
-  if ["${paired}"=="no" ]; then
+  if [ "${paired}"=="no" ]; then
     macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
   else
     macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
@@ -34,7 +34,7 @@ if ["${narrow}"=="yes" ];then
 
 else
 
-  if ["${paired}"=="no" ]; then
+  if [ "${paired}"=="no" ]; then
     macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
   else 
     macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
