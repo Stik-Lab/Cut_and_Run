@@ -3,7 +3,7 @@
 #SBATCH --mem=100gb
 #SBATCH --time=72:00:00
 #SBATCH --cpus-per-task=8
-#SBATCH --output=CutnrunPIPELINE_%A-%a.txt
+#SBATCH --output=CutnrunPIPELINE_%A-%a.log
 
 # ========== VARIABLES ==========
 # put in a file call samples.txt the name of the variables
@@ -12,7 +12,7 @@ N=$(wc -l < samples.txt)
 describer=$(sed -n "${SLURM_ARRAY_TASK_ID}p" samples.txt)
 
 source ./config.sh
-for dir in "${path_bam}" ${path_temp} ${path_bw} ; do
+for dir in "${path_bam}" "${path_temp}" "${path_bw}" ; do
   if [ ! -d "${dir}" ]; then
     mkdir -p "${dir}"
   fi
@@ -38,7 +38,7 @@ echo "................................................................ 1. END_FA
 # ========== TRIMMING ==========
 echo   "................................................................     2. START_TRIMMING ${describer}   ................................................................"
 
-if ["${paired}"=="no" ]; then
+if [ "${paired}" == "no" ]; then
 
 trim_galore --fastqc --output_dir ${path_fq}  ${path_fq}/${describer}.fastq.gz
 
@@ -55,14 +55,14 @@ echo    "................................................................    2. 
 # ========== ALIGNMENT ==========
 echo "................................................................ 3. START_ALIGNMENT ${describer} ................................................................"
 
-if ["${paired}"=="no" ]; then
+if [ "${paired}" == "no" ]; then
 
 bowtie2 -x ${indexgenome} \
        -U ${path_fq}/${describer}*.fq.gz \
-       --very-sensitive-local --no-unal --no-mixed --no-discordant -k 2 --phred33 -I 10 -X 700 --dovetail -p 8 \
+       --very-sensitive-local --no-unal -k 2 --phred33 -I 10 -X 700 -p 8 \
        -S ${path_temp}/${describer}.sam
 else
-	
+
 bowtie2 -x ${indexgenome} \
        -1 ${path_fq}/${describer}_*1_val_1.fq.gz \
        -2  ${path_fq}/${describer}_*2_val_2.fq.gz \
@@ -121,3 +121,12 @@ echo "................................................................ 9. START_
 bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${describer}.bw --effectiveGenomeSize ${effectiveGenomeSize} --outFileFormat bigwig --binSize 10 --normalizeUsing RPGC > ${path_bw}/${describer}.log
 
 echo "................................................................ 9. END_bigwig ${describer} ................................................................"
+
+
+# ==========  LAUNCH ANALYSIS SCRIPTS ==========
+
+if [ "$(grep 'job successful' CutnrunPIPELINE_*.log | wc -l)" -eq "${N}" ]; then
+    sbatch --array=1-${N} pipeline/peak_calling.sh
+else
+    echo "Number of completed jobs: $(grep 'job successful' CutnrunPIPELINE_*.log | wc -l)"
+fi
