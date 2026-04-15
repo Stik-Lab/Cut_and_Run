@@ -252,26 +252,37 @@ Identifies open chromatin regions (peaks) from the cleaned BAM.
 
 #### Command line:
 
+Calls peaks from the cleaned BAM files against an input/IgG control. The pipeline runs peak calling twice at two different q-value thresholds (`0.1` and `0.05`) to allow downstream comparison of stringency. Supports both narrow (e.g. transcription factors) and broad (e.g. histone marks) peak modes.
+
+#### Command line:
+**Narrow peaks, paired-end:**
 ```bash
-macs2 callpeak \
-  --format BAMPE \
-  -t clean.bam \
-  -g hs \
-  -n sample_name \
-  -B \
-  -q 0.05 \
-  --outdir peak_output
+macs2 callpeak --format BAMPE \
+    -t sample_clean.bam -c input_clean.bam \
+    -g hs -n sample_0{num} -q 0.{num} \
+    --outdir macs2/
 ```
+**Broad peaks, paired-end:**
+```bash
+macs2 callpeak --format BAMPE \
+    -t sample_clean.bam -c input_clean.bam \
+    -g hs -n sample_0{num} --broad -q 0.{num} \
+    --outdir macs2/
+```
+> For single-end data replace `--format BAMPE` with `--format BAM`.
 
 #### Arguments:
+| Flag | Description | Mode |
+|---|---|---|
+| `--format BAMPE` / `--format BAM` | Input format: paired-end or single-end BAM | Both |
+| `-t` | Treatment BAM file | Both |
+| `-c` | Control/input BAM file | Both |
+| `-g hs` | Effective genome size (human) | Both |
+| `-n` | Output prefix, includes q-value threshold | Both |
+| `-q 0.05` / `-q 0.1` | Q-value cutoff — run twice for comparison | Both |
+| `--outdir` | Output directory | Both |
+| `--broad` | Broad peak calling mode for histone marks | Broad only |
 
-- ``` --format BAMPE```: Specifies paired-end BAM format 
-- ```-t```: Input treatment BAM file (clean.bam)
-- ```-g hs```: Genome size (hs for human, or use effective genome size like 2.7e9)
-- ```-n```: Sample name prefix for output files
-- ```-B```: Generates signal pileup files (*.bdg) 
-- ```-q 0.05```: FDR cutoff for peak detection (q-value) 
-- ```--outdir```: Output directory for peak files
 
 ### Output files
 
@@ -281,4 +292,4 @@ macs2 callpeak \
 - Filtered and deduplicated BAM files (clean.bam, dedup.bam)
 - Duplicate metrics (metrics.txt)
 - Normalized signal tracks (.bw)
-- Peak calling results from MACS2 (.narrowPeak, .xls, .bdg, etc.)
+- Peak calling results from MACS2 
