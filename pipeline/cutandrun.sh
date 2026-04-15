@@ -40,11 +40,14 @@ echo   "................................................................     2. 
 
 if [ "${paired}" == "no" ]; then
 
-trim_galore --fastqc --output_dir ${path_fq}  ${path_fq}/${describer}.fastq.gz
+    R1=$(ls ${path_fq}/${describer}*.f*q.gz | head -n 1)
+    trim_galore --fastqc --output_dir ${path_fq} "${R1}"
 
 else
 
-trim_galore --fastqc --output_dir ${path_fq} --paired ${path_fq}/${describer}_*1.fastq.gz ${path_fq}/${describer}_*2.fastq.gz
+    R1=$(ls ${path_fq}/${describer}*{_1,_R1}*.f*q.gz | head -n 1)
+    R2=$(ls ${path_fq}/${describer}*{_2,_R2}*.f*q.gz | head -n 1)
+    trim_galore --fastqc --output_dir ${path_fq} --paired "${R1}" "${R2}"
 
 fi
 
@@ -57,17 +60,24 @@ echo "................................................................ 3. START_
 
 if [ "${paired}" == "no" ]; then
 
-bowtie2 -x ${indexgenome} \
-       -U ${path_fq}/${describer}*.fq.gz \
-       --very-sensitive-local --no-unal -k 2 --phred33 -I 10 -X 700 -p 8 \
-       -S ${path_temp}/${describer}.sam
+T1=$(ls ${path_fq}/${describer}*_trimmed.fq.gz 2>/dev/null || ls ${path_fq}/${describer}*.fq.gz | head -n 1)
+
+    bowtie2 -x ${indexgenome} \
+           -U "${T1}" \
+           --very-sensitive-local --no-unal -k 2 --phred33 -I 10 -X 700 -p 8 \
+           -S ${path_temp}/${describer}.sam
+
+
 else
 
-bowtie2 -x ${indexgenome} \
-       -1 ${path_fq}/${describer}_*1_val_1.fq.gz \
-       -2  ${path_fq}/${describer}_*2_val_2.fq.gz \
-       --very-sensitive-local --no-unal --no-mixed --no-discordant -k 2 --phred33 -I 10 -X 700 --dovetail -p 8 \
-       -S ${path_temp}/${describer}.sam
+    T1=$(ls ${path_fq}/${describer}*val_1.fq.gz)
+    T2=$(ls ${path_fq}/${describer}*val_2.fq.gz)
+
+    bowtie2 -x ${indexgenome} \
+           -1 "${T1}" \
+           -2 "${T2}" \
+           --very-sensitive-local --no-unal --no-mixed --no-discordant -k 2 --phred33 -I 10 -X 700 --dovetail -p 8 \
+           -S ${path_temp}/${describer}.sam
 
 fi
 
@@ -122,6 +132,12 @@ bamCoverage --bam ${path_bam}/${describer}_clean.bam --outFileName ${path_bw}/${
 
 echo "................................................................ 9. END_bigwig ${describer} ................................................................"
 
+if [ -f "${path_bw}/${describer}.bw" ]; then
+    echo "job successful"
+else
+    echo "job failed: bigwig not found for ${describer}"
+    exit 1
+fi
 
 # ==========  LAUNCH ANALYSIS SCRIPTS ==========
 
