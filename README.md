@@ -2,10 +2,46 @@
 
 This repository contains a complete Cut and Run analysis pipeline designed for SLURM environments using Bash scripts.
 
+## Table of Contents
 
-
-<!-- Pre-procesing Step-by-Step Description -->
-## Pre-processing Step-by-Step Description
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#input-files">Input files</a>
+    </li>
+    <li>
+      <a href="#before-starting">Before starting</a>
+      <ul>
+        <li><a href="#1-prepare-the-sample-files">Prepare the sample files</a></li>
+        <li><a href="#2-edit-the-configsh-file">Edit the config.sh file</a></li>
+        <li><a href="#3-hpc-environment">HPC environment</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#how-to-run-the-pipeline">How to run the pipeline</a>
+    </li>
+    <li>
+      <a href="#step-by-step-description">Step-by-Step Description</a>
+      <ul>
+        <li><a href="#1-quality-control-fastqc">1. Quality Control (FastQC)</a></li>
+        <li><a href="#2-adapter-trimming-trim-galore">2. Adapter Trimming (Trim Galore)</a></li>
+        <li><a href="#3-alignment-bowtie2">3. Alignment (Bowtie2)</a></li>
+        <li><a href="#4-sam-to-bam-conversion-and-sorting-samtools">4. SAM to BAM (SAMtools)</a></li>
+        <li><a href="#5-remove-mitochondrial-reads-chrm">5. Remove Mitochondrial Reads</a></li>
+        <li><a href="#6-filter-low-quality-reads">6. Filter Low-Quality Reads</a></li>
+        <li><a href="#7-remove-duplicates-picard">7. Remove Duplicates (Picard)</a></li>
+        <li><a href="#8-remove-blacklist-regions-bedtools">8. Remove Blacklist Regions</a></li>
+        <li><a href="#9-generate-signal-tracks-deeptools">9. Generate Signal Tracks</a></li>
+        <li><a href="#10-peak-calling-macs2">10. Peak Calling (MACS2)</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#output-files">Output files</a>
+    </li>
+  </ol>
+</details>
 
 ## Input files
 
