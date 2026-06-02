@@ -8,15 +8,16 @@
 # ========== VARIABLES ==========
 # put in a file call samples.txt the name of the variables
 
-N=$(wc -l < samples.txt)
 describer=$(sed -n "${SLURM_ARRAY_TASK_ID}p" samples.txt)
-
 source ./config.sh
+
 for dir in "${path_bam}" "${path_temp}" "${path_bw}" ; do
   if [ ! -d "${dir}" ]; then
     mkdir -p "${dir}"
   fi
 done
+
+N=$(( $(wc -l < samples.txt) - 1 ))
 
 # ========== MODULES ==========
 module load fastqc-0.11.9-gcc-11.2.0-dd2vd2m
