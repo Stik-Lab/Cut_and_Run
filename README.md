@@ -31,7 +31,7 @@ This repository contains a complete Cut and Run analysis pipeline designed for S
         <li><a href="#4-sam-to-bam-conversion-and-sorting-samtools">4. SAM to BAM (SAMtools)</a></li>
         <li><a href="#5-remove-mitochondrial-reads-chrm">5. Remove Mitochondrial Reads</a></li>
         <li><a href="#6-filter-low-quality-reads">6. Filter Low-Quality Reads</a></li>
-        <li><a href="#7-remove-duplicates-picard">7. Remove Duplicates (Picard)</a></li>
+        <li><a href="#7-mark-duplicates-picard">7. Mark Duplicates (Picard)</a></li>
         <li><a href="#8-remove-blacklist-regions-bedtools">8. Remove Blacklist Regions</a></li>
         <li><a href="#9-generate-signal-tracks-deeptools">9. Generate Signal Tracks</a></li>
         <li><a href="#10-peak-calling-macs2">10. Peak Calling (MACS2)</a></li>
@@ -224,8 +224,8 @@ samtools view -F 2304 -b -q 10 input.bam > output.bam
 - ```-F 2304```: Filters out non-primary and duplicate reads
 - ```-q 10```: Minimum mapping quality
 
-### 7. Remove Duplicates (Picard)
-Marks and removes PCR duplicates.
+### 7. Mark Duplicates (Picard)
+Marks PCR duplicates.
 
 #### Command line:
 
@@ -234,13 +234,13 @@ java -jar picard.jar MarkDuplicates \
   I=input.bam \
   O=dedup.bam \
   M=metrics.txt \
-  REMOVE_DUPLICATES=true
+  REMOVE_DUPLICATES=false
 ```
 #### Arguments:
 - ```I``` → Input BAM file (input.bam) 
 - ```O``` → Output BAM file after duplicate removal (dedup.bam)
 - ```M``` → Metrics file reporting duplication statistics (metrics.txt)
-- ```REMOVE_DUPLICATES=true``` → Removes duplicates instead of just marking them
+- ```REMOVE_DUPLICATES=false``` 
 
 
 ### 8. Remove Blacklist Regions (bedtools)
