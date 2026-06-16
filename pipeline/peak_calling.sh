@@ -26,18 +26,18 @@ do
 if [ "${narrow}"=="yes" ];then
 
   if [ "${paired}"=="no" ]; then
-    macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
+    macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs --keep-dup all -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
   else
-    macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
+    macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs --keep-dup all -n ${describer}_0${num} -q 0.${num} --outdir ${path_macs2}
   fi
 
 
 else
 
   if [ "${paired}"=="no" ]; then
-    macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
+    macs2 callpeak --format BAM -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs --keep-dup all -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
   else 
-    macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
+    macs2 callpeak --format BAMPE -t ${path_bam}/${describer}_clean.bam -c ${path_bam}/${input}_clean.bam -g hs --keep-dup all -n ${describer}_0${num} --broad -B -q 0.${num} --outdir ${path_macs2}
   fi
 
 
