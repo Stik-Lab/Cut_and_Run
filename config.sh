@@ -15,6 +15,7 @@ N=$(wc -l < samples.txt)
 paired='yes/no'
 narrow='yes/no'
 genome='hg38'
+wo_input='yes/no'  # indicates if there is input in the analysis or not
 input=$(tail -n 1 samples.txt)
 effectiveGenomeSize=2913022398
 
