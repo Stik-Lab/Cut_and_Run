@@ -170,8 +170,12 @@ fi
 
 # ==========  LAUNCH ANALYSIS SCRIPTS ==========
 
-if [ "$(grep 'job successful' CutnrunPIPELINE_*.log | wc -l)" -eq "${N}" ]; then
-    sbatch --array=1-${N} pipeline/peak_calling.sh
+if [ "$(grep 'job successful' CutnrunPIPELINE_${SLURM_ARRAY_JOB_ID}-*.log | wc -l)" -eq "${N}" ]; then
+    if [ "${wo_input}" == "no" ]; then
+        sbatch --array=1-${N} pipeline/peak_calling.sh
+    else
+        sbatch --array=1-$((N+1)) pipeline/peak_calling_woinput.sh
+    fi
 else
-    echo "Number of completed jobs: $(grep 'job successful' CutnrunPIPELINE_*.log | wc -l)"
+    echo "Number of completed jobs: $(grep 'job successful' CutnrunPIPELINE_${SLURM_ARRAY_JOB_ID}-*.log | wc -l)"
 fi
