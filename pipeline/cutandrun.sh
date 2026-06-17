@@ -169,12 +169,13 @@ else
 fi
 
 # ==========  LAUNCH ANALYSIS SCRIPTS ==========
+array_id=${SLURM_ARRAY_TASK_ID}
 
 if [ "$(grep 'job successful' CutnrunPIPELINE_${SLURM_ARRAY_JOB_ID}-*.log | wc -l)" -eq "${N}" ]; then
     if [ "${wo_input}" == "no" ]; then
         sbatch --array=1-${N} pipeline/peak_calling.sh
     else
-        sbatch --array=1-$((N+1)) pipeline/peak_calling_woinput.sh
+        sbatch --array=${array_id}-${array_id} pipeline/peak_calling_woinput.sh
     fi
 else
     echo "Number of completed jobs: $(grep 'job successful' CutnrunPIPELINE_${SLURM_ARRAY_JOB_ID}-*.log | wc -l)"
